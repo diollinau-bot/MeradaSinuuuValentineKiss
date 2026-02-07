@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Cute readable fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #ffe0ea, #ffb6c1);
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: heartbeatBG 3s infinite;
+}
+
+/* Heartbeat background */
+@keyframes heartbeatBG {
+  0%,100% { background-size: 100% 100%; }
+  50% { background-size: 110% 110%; }
+}
+
+/* Name handwriting */
+.name {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8em;
+  color: #b3005e;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid pink;
+  width: 0;
+  animation: write 3s steps(12) forwards, blink 0.7s infinite;
+}
+
+@keyframes write { to { width: 6.5ch; } }
+@keyframes blink { 50% { border-color: transparent; } }
+
+/* Question */
+h1 {
+  color: #b3005e;
+  text-align: center;
+  font-size: 2.3em;
+  margin: 10px;
+}
+
+/* Countdown */
+#countdown {
+  font-size: 1.1em;
+  color: #8b004f;
+  margin-bottom: 25px;
+}
+
+/* Buttons */
+.buttons {
+  position: relative;
+  width: 340px;
+  height: 220px;
+}
+
+button {
+  padding: 15px 35px;
+  font-size: 1.3em;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  position: absolute;
+}
+
+/* YES button */
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+  left: 50%;
+  top: 65%;
+  transform: translate(-50%, -50%);
+  animation: pulse 1.8s infinite, glow 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 15px #ff4d6d; }
+  50% { box-shadow: 0 0 35px #ff8fa3; }
+  100% { box-shadow: 0 0 15px #ff4d6d; }
+}
+
+/* NO button */
+#noBtn {
+  background: #bbb;
+  color: white;
+  left: 50%;
+  top: 25%;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s ease;
+}
+
+/* Floating emojis */
+.emoji {
+  position: absolute;
+  font-size: 2em;
+  pointer-events: none;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* Heart explosion */
+.heart {
+  position: absolute;
+  font-size: 2em;
+  pointer-events: none;
+  animation: explode 1.2s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(0); opacity: 1; }
+  100% {
+    transform: scale(1.6) translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="name">Sinuuuu</div>
+
+<h1>Will you be my Valentine 🥹❤️</h1>
+
+<div id="countdown"></div>
+
+<div class="buttons">
+  <button id="yesBtn">YES 🥳🎀💖</button>
+  <button id="noBtn">NO 🥺</button>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+/* Countdown to Valentine's Day */
+function updateCountdown() {
+  const now = new Date();
+  let year = now.getFullYear();
+  let val = new Date(year, 1, 14);
+  if (now > val) val = new Date(year + 1, 1, 14);
+
+  const diff = val - now;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const mins = Math.floor((diff / (1000*60)) % 60);
+
+  document.getElementById("countdown").innerText =
+    `💗 ${days} days ${hours} hours ${mins} minutes until Valentine’s Day 💗`;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* NO button runs away */
+noBtn.addEventListener("mouseenter", () => {
+  const x = Math.random() * 80;
+  const y = Math.random() * 70;
+  noBtn.style.left = x + "vw";
+  noBtn.style.top = y + "vh";
+});
+
+/* YES clicked */
+yesBtn.addEventListener("click", () => {
+  document.body.innerHTML = `
+    <h1>Awwwww I Love You Sinuuuuuu 🥹❤️😘</h1>
+    <p style="font-size:1.3em;color:#8b004f;text-align:center;">
+      Thank you for being my blessing and also my VALENTINE 💗
+    </p>
+    <p style="font-size:1.2em;color:#b3005e;text-align:center;margin-top:20px;">
+      💌 Secret message:<br>
+      You are my happiest place, my safest hug, and my forever 💖
+    </p>
+  `;
+  spawnEmojis();
+  heartExplosion(innerWidth/2, innerHeight/2);
+});
+
+/* Floating emojis */
+function spawnEmojis() {
+  const emojis = ["🥹","❤️","✨","💖","🎀","🥳","💋","💕"];
+  setInterval(() => {
+    const e = document.createElement("div");
+    e.className = "emoji";
+    e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = Math.random()*100 + "vw";
+    e.style.animationDuration = (3 + Math.random()*4) + "s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),7000);
+  },300);
+}
+
+/* Heart explosion */
+function heartExplosion(x,y) {
+  const hearts = ["❤️","💗","💖","💕","💘"];
+  for (let i=0;i<35;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText=hearts[Math.floor(Math.random()*hearts.length)];
+    h.style.left=x+"px";
+    h.style.top=y+"px";
+    h.style.setProperty("--x",(Math.random()*350-175)+"px");
+    h.style.setProperty("--y",(Math.random()*350-175)+"px");
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1200);
+  }
+}
+
+spawnEmojis();
+</script>
+
+</body>
+</html>
